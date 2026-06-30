@@ -18,419 +18,684 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
   --gold:#C4A46B;
-  --gold-dim:rgba(196,164,107,0.18);
-  --gold-mid:rgba(196,164,107,0.45);
-  --gold-bright:rgba(196,164,107,0.85);
+  --gold-10:rgba(196,164,107,0.10);
+  --gold-18:rgba(196,164,107,0.18);
+  --gold-28:rgba(196,164,107,0.28);
+  --gold-45:rgba(196,164,107,0.45);
+  --gold-65:rgba(196,164,107,0.65);
+  --gold-85:rgba(196,164,107,0.85);
+  --black:#000;
+  --glass:rgba(4,3,2,0.86);
+  --glass-light:rgba(8,6,4,0.72);
+  --border:rgba(196,164,107,0.16);
+  --border-mid:rgba(196,164,107,0.28);
 }
 html,body{
-  width:100%;height:100%;
-  background:#000;
-  font-family:"Inter",sans-serif;font-weight:300;
-  color:#fff;
+  width:100%;height:100%;background:#000;
+  font-family:"Inter",sans-serif;font-weight:300;color:#fff;
   -webkit-font-smoothing:antialiased;
-  overflow:hidden;
-  overscroll-behavior:none;
-  -webkit-overflow-scrolling:touch;
-  user-select:none;-webkit-user-select:none;
-  -webkit-tap-highlight-color:transparent;
-  /* iOS safe areas */
-  padding-top:env(safe-area-inset-top);
-  padding-bottom:env(safe-area-inset-bottom);
+  overflow:hidden;overscroll-behavior:none;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+  touch-action:pan-y;
 }
 
-/* ── BOOT SCREEN ─────────────────────────────────────── */
+/* ── BOOT ───────────────────────────────────── */
 #boot{
-  position:fixed;inset:0;z-index:999;
-  background:#000;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:0;
-  transition:opacity 1.1s ease;
+  position:fixed;inset:0;z-index:999;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1s ease;
 }
-#boot.fade-out{opacity:0;pointer-events:none;}
-
-.boot-space{height:clamp(10px,3vh,22px);}
-
-.boot-crest{
-  width:clamp(72px,22vw,108px);
-  height:clamp(72px,22vw,108px);
-  border-radius:50%;
-  border:1px solid rgba(196,164,107,0.25);
-  background:url("/shield-os/shield-logo.jpg") center center / cover no-repeat;
-  box-shadow:0 0 0 0 rgba(196,164,107,0);
-  animation:crestBreath 3s ease-in-out infinite;
-}
-@keyframes crestBreath{
-  0%,100%{box-shadow:0 0 0 0 rgba(196,164,107,0); border-color:rgba(196,164,107,0.22);}
-  50%{box-shadow:0 0 28px 6px rgba(196,164,107,0.14); border-color:rgba(196,164,107,0.42);}
-}
-
-.boot-divider{
-  width:clamp(50px,18vw,80px);height:1px;margin:clamp(16px,4vh,28px) 0;
-  background:linear-gradient(to right,transparent,rgba(196,164,107,0.4),transparent);
-}
-
-.boot-name{
-  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;
-  font-size:clamp(15px,4.8vw,22px);
-  letter-spacing:0.42em;text-transform:uppercase;
-  color:rgba(196,164,107,0.75);
-}
-.boot-sub{
-  font-size:clamp(6.5px,2.1vw,9px);
-  letter-spacing:0.3em;text-transform:uppercase;
-  color:rgba(196,164,107,0.24);
-  margin-top:clamp(6px,1.5vh,10px);
-}
-
-/* Loading bar */
-.boot-bar-track{
-  width:clamp(80px,28vw,130px);height:1px;
-  background:rgba(196,164,107,0.1);
-  margin-top:clamp(20px,5vh,36px);
-  position:relative;overflow:hidden;border-radius:1px;
-}
-.boot-bar-fill{
-  position:absolute;left:-100%;top:0;height:100%;width:100%;
-  background:linear-gradient(to right,transparent,rgba(196,164,107,0.6),transparent);
-  animation:barSweep 1.6s ease-in-out infinite;
-}
-@keyframes barSweep{
-  0%{left:-100%;}100%{left:100%;}
-}
-
-/* ── APP SHELL ───────────────────────────────────────── */
-#app{
-  position:fixed;inset:0;
-  opacity:0;transition:opacity 0.9s ease;
-  pointer-events:none;
-}
-#app.visible{opacity:1;pointer-events:all;}
-
-#bg{
-  position:absolute;inset:0;
-  background:url("/shield-os/bg-mobile.jpg") center center / cover no-repeat;
-  z-index:0;
-}
-/* Atmospheric vignette */
-#vignette{
-  position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 70%),
-    linear-gradient(to bottom,
-      rgba(0,0,0,0.22) 0%,
-      rgba(0,0,0,0) 30%,
-      rgba(0,0,0,0) 42%,
-      rgba(0,0,0,0.6) 70%,
-      rgba(0,0,0,0.92) 100%
-    );
-}
-/* Gold dust particles */
-.dust{
-  position:absolute;z-index:2;pointer-events:none;
-  width:1px;height:1px;border-radius:50%;
-  background:rgba(196,164,107,0.5);
-  animation:drift linear infinite;
-}
-@keyframes drift{
-  0%{transform:translateY(0) translateX(0);opacity:0;}
-  10%{opacity:1;}
-  90%{opacity:0.4;}
-  100%{transform:translateY(-80vh) translateX(var(--dx));opacity:0;}
-}
-
-/* ── WORDMARK ────────────────────────────────────────── */
-#wordmark{
-  position:absolute;
-  top:clamp(28px,7.5vh,60px);
-  left:50%;transform:translateX(-50%);
-  z-index:10;text-align:center;white-space:nowrap;
-}
-.wm-title{
-  font-family:"Cormorant Garamond",serif;
-  font-size:clamp(13px,4.4vw,20px);
-  letter-spacing:0.38em;text-transform:uppercase;
-  color:rgba(196,164,107,0.84);font-style:italic;font-weight:300;display:block;
-}
-.wm-sub{
-  font-size:clamp(6px,2vw,8.5px);
-  letter-spacing:0.28em;text-transform:uppercase;
-  color:rgba(196,164,107,0.38);display:block;margin-top:5px;
-}
-.wm-line{
-  width:clamp(40px,14vw,60px);height:1px;
-  background:linear-gradient(to right,transparent,rgba(196,164,107,0.28),transparent);
-  margin:7px auto 0;
-}
-
-/* ── INSCRIPTION ─────────────────────────────────────── */
-#inscription{
-  position:absolute;
-  top:clamp(82px,18vh,130px);
-  left:50%;transform:translateX(-50%);
-  z-index:10;pointer-events:none;white-space:nowrap;
-}
-#inscription span{
-  font-family:"Cormorant Garamond",serif;
-  font-size:clamp(6px,2vw,8px);
-  letter-spacing:0.25em;text-transform:uppercase;
-  color:rgba(196,164,107,0.14);font-style:italic;
-}
-
-/* ── CORNER MARKS ────────────────────────────────────── */
-.corner-mark{
-  position:absolute;z-index:10;
-  font-size:clamp(5px,1.6vw,7px);
-  letter-spacing:0.22em;text-transform:uppercase;
-  color:rgba(196,164,107,0.13);pointer-events:none;
-}
-#mark-tl{top:clamp(12px,3vh,20px);left:clamp(14px,4vw,22px);}
-#mark-tr{top:clamp(12px,3vh,20px);right:clamp(14px,4vw,22px);}
-#mark-bl{bottom:clamp(12px,3vh,20px);left:clamp(14px,4vw,22px);}
-
-/* ── BOTTOM NAV ─────────────────────────────────────── */
-#nav{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  z-index:10;
-  padding-bottom:max(clamp(18px,5.5vh,36px), env(safe-area-inset-bottom));
-}
-.nav-separator{
-  height:1px;
-  margin:0 clamp(12px,4vw,28px) clamp(10px,2.5vh,18px);
-  background:linear-gradient(to right,transparent,rgba(196,164,107,0.22) 20%,rgba(196,164,107,0.44) 50%,rgba(196,164,107,0.22) 80%,transparent);
-}
-#nav-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:0;
-  padding:0 clamp(2px,1vw,6px);
-}
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;
-  gap:clamp(3px,0.8vh,6px);
-  padding:clamp(5px,1.2vh,10px) 1px clamp(4px,1vh,8px);
-  cursor:pointer;text-decoration:none;
-  position:relative;overflow:hidden;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
-}
-/* Tap ripple */
-.nav-item::before{
-  content:"";position:absolute;
-  inset:0;border-radius:8px;
-  background:rgba(196,164,107,0);
-  transition:background 0.3s;
-}
-.nav-item.touched::before{background:rgba(196,164,107,0.06);}
-
-/* Top accent line */
-.nav-item::after{
-  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:0;height:1px;
-  background:linear-gradient(to right,transparent,rgba(196,164,107,0.7),transparent);
-  transition:width 0.25s ease;
-}
-.nav-item.touched::after,.nav-item:hover::after{width:60%;}
-
-.nav-icon{
-  width:clamp(26px,7.5vw,38px);height:clamp(26px,7.5vw,38px);
-  border-radius:50%;
-  border:1px solid rgba(196,164,107,0.32);
-  background:rgba(0,0,0,0.25);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:border-color 0.22s,box-shadow 0.22s,background 0.22s;
-  position:relative;
-}
-.nav-icon svg{width:50%;height:50%;opacity:0.7;transition:opacity 0.22s;}
-.nav-label{
-  font-size:clamp(5px,1.7vw,7px);
-  letter-spacing:0.14em;text-transform:uppercase;
-  color:rgba(196,164,107,0.56);
-  text-align:center;white-space:nowrap;
-  line-height:1.2;
-  transition:color 0.22s;
-}
-.nav-item.touched .nav-icon,
-.nav-item:active .nav-icon{
-  border-color:rgba(196,164,107,0.72);
-  box-shadow:0 0 18px rgba(196,164,107,0.26);
-  background:rgba(196,164,107,0.08);
-}
-.nav-item.touched .nav-icon svg,
-.nav-item:active .nav-icon svg{opacity:1;}
-.nav-item.touched .nav-label,
-.nav-item:active .nav-label{
-  color:rgba(196,164,107,0.96);
-  text-shadow:0 0 10px rgba(196,164,107,0.35);
-}
-
-/* ── PAGE CURTAIN ────────────────────────────────────── */
-#curtain{
-  position:fixed;inset:0;z-index:800;
-  background:#000;opacity:0;pointer-events:none;
-  transition:opacity 0.42s ease;
-}
-#curtain.active{opacity:1;pointer-events:all;}
-
-/* ── INSTALL BANNER ──────────────────────────────────── */
-#install-banner{
-  display:none;
-  position:fixed;
-  bottom:max(clamp(110px,24vh,155px), calc(env(safe-area-inset-bottom) + 110px));
-  left:50%;transform:translateX(-50%);
-  z-index:700;
-  background:rgba(2,1,0,0.94);
-  border:1px solid rgba(196,164,107,0.36);
-  border-radius:14px;
-  padding:clamp(12px,3vh,18px) clamp(16px,5vw,24px);
-  text-align:center;
-  backdrop-filter:blur(16px);
-  width:clamp(200px,78vw,290px);
-  animation:bannerIn 0.38s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes bannerIn{
-  from{opacity:0;transform:translateX(-50%) translateY(16px) scale(0.96);}
-  to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
-}
-.banner-crest{
-  width:36px;height:36px;border-radius:50%;
+#boot.out{opacity:0;pointer-events:none;}
+.b-crest{
+  width:80px;height:80px;border-radius:50%;
+  border:1px solid var(--gold-28);
   background:url("/shield-os/shield-logo.jpg") center/cover;
-  border:1px solid rgba(196,164,107,0.28);
-  margin:0 auto clamp(8px,2vh,12px);
+  animation:bPulse 2.8s ease-in-out infinite;
 }
-.banner-title{
+@keyframes bPulse{0%,100%{box-shadow:0 0 0 0 rgba(196,164,107,0);}50%{box-shadow:0 0 26px 5px rgba(196,164,107,0.13);}}
+.b-rule{width:70px;height:1px;background:linear-gradient(to right,transparent,var(--gold-45),transparent);margin:20px auto;}
+.b-name{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold-65);}
+.b-sub{font-size:7.5px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold-28);margin-top:8px;}
+.b-track{width:110px;height:1px;background:rgba(196,164,107,0.08);margin-top:24px;overflow:hidden;border-radius:1px;}
+.b-fill{height:100%;background:linear-gradient(to right,transparent,var(--gold-65),transparent);animation:bSweep 1.5s ease-in-out infinite;}
+@keyframes bSweep{0%{margin-left:-100%;}100%{margin-left:100%;}}
+
+/* ── SHELL ──────────────────────────────────── */
+#shell{position:fixed;inset:0;opacity:0;transition:opacity 0.8s ease;pointer-events:none;}
+#shell.on{opacity:1;pointer-events:all;}
+#bg{position:absolute;inset:0;background:url("/shield-os/bg-mobile.jpg") center/cover;z-index:0;}
+#veil{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.3) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 38%,rgba(0,0,0,0.65) 68%,rgba(0,0,0,0.96) 100%);
+}
+
+/* Floating dust */
+.dust{position:absolute;z-index:2;pointer-events:none;width:1px;height:1px;border-radius:50%;background:rgba(196,164,107,0.45);animation:dustRise linear infinite;}
+@keyframes dustRise{0%{transform:translateY(0) translateX(0);opacity:0;}12%{opacity:1;}88%{opacity:0.3;}100%{transform:translateY(-75vh) translateX(var(--dx));opacity:0;}}
+
+/* ── TOP BAR ───────────────────────────────── */
+#topbar{
+  position:absolute;top:0;left:0;right:0;z-index:20;
+  padding:max(env(safe-area-inset-top),16px) 18px 0;
+  display:flex;align-items:flex-start;justify-content:space-between;
+}
+#topbar-left{display:flex;flex-direction:column;}
+.tb-name{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:13px;letter-spacing:0.36em;text-transform:uppercase;color:var(--gold-65);}
+.tb-sub{font-size:6px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold-28);margin-top:3px;}
+.tb-right{display:flex;align-items:center;gap:10px;padding-top:2px;}
+.tb-badge{
+  font-size:6px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold-45);
+  border:1px solid var(--gold-18);
+  border-radius:20px;padding:3px 8px;
+  background:rgba(0,0,0,0.4);
+}
+#clock{font-size:10px;letter-spacing:0.15em;color:var(--gold-45);font-family:"Cormorant Garamond",serif;}
+
+/* ── BOTTOM NAV ────────────────────────────── */
+#bnav{
+  position:absolute;bottom:0;left:0;right:0;z-index:20;
+  padding-bottom:max(env(safe-area-inset-bottom),18px);
+}
+.bnav-rule{height:1px;margin:0 16px 10px;background:linear-gradient(to right,transparent,var(--gold-28) 30%,var(--gold-45) 50%,var(--gold-28) 70%,transparent);}
+.bnav-grid{display:flex;justify-content:space-around;align-items:flex-end;padding:0 4px;}
+.bni{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:6px 8px 4px;cursor:pointer;
+  border-radius:10px;transition:background 0.2s;
+  flex:1;position:relative;
+}
+.bni::after{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:1px;background:var(--gold-65);transition:width 0.2s;}
+.bni.active::after,.bni.touched::after{width:55%;}
+.bni-icon{
+  width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--gold-18);
+  background:rgba(0,0,0,0.2);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color 0.22s,box-shadow 0.22s,background 0.22s;
+}
+.bni-icon svg{width:48%;height:48%;opacity:0.62;transition:opacity 0.2s;}
+.bni-label{font-size:6px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-45);transition:color 0.2s;white-space:nowrap;}
+.bni.active .bni-icon,.bni.touched .bni-icon{border-color:var(--gold-65);box-shadow:0 0 14px rgba(196,164,107,0.22);background:rgba(196,164,107,0.07);}
+.bni.active .bni-icon svg,.bni.touched .bni-icon svg{opacity:1;}
+.bni.active .bni-label,.bni.touched .bni-label{color:var(--gold-85);}
+
+/* ── PANELS ────────────────────────────────── */
+.panel{
+  position:absolute;inset:0;z-index:10;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+.panel.open{display:flex;}
+
+/* Panel header */
+.ph{
+  padding:max(env(safe-area-inset-top),52px) 18px 0;
+  flex-shrink:0;
+}
+.ph-title{
   font-family:"Cormorant Garamond",serif;font-style:italic;
-  font-size:clamp(11px,3.6vw,15px);
-  letter-spacing:0.2em;text-transform:uppercase;
-  color:rgba(196,164,107,0.92);
-  display:block;margin-bottom:5px;
+  font-size:clamp(18px,5.5vw,26px);letter-spacing:0.2em;
+  color:var(--gold-85);margin-bottom:3px;
 }
-.banner-sub{
-  font-size:clamp(7.5px,2.3vw,9.5px);
-  letter-spacing:0.1em;color:rgba(255,255,255,0.38);
-  display:block;margin-bottom:clamp(10px,2.5vh,16px);
-  line-height:1.55;
-}
-.banner-install-btn{
-  display:inline-block;
-  background:rgba(196,164,107,0.1);
-  border:1px solid rgba(196,164,107,0.42);
-  border-radius:28px;
-  padding:clamp(7px,1.8vh,10px) clamp(18px,6vw,26px);
-  font-size:clamp(7px,2.2vw,9px);
-  letter-spacing:0.22em;text-transform:uppercase;
-  color:rgba(196,164,107,0.88);
+.ph-sub{font-size:7px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold-45);}
+.ph-rule{height:1px;background:linear-gradient(to right,var(--gold-28),transparent);margin:12px 0;}
+
+/* Scrollable body */
+.pb{flex:1;overflow-y:auto;padding:0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.pb::-webkit-scrollbar{display:none;}
+.pb-pad{height:max(env(safe-area-inset-bottom),90px);}
+
+/* ── CARDS ──────────────────────────────────── */
+.card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-bottom:10px;
   cursor:pointer;
-  transition:background 0.2s,border-color 0.2s,box-shadow 0.2s;
-  margin-bottom:8px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  position:relative;overflow:hidden;
 }
-.banner-install-btn:active{
-  background:rgba(196,164,107,0.2);
-  border-color:rgba(196,164,107,0.72);
-  box-shadow:0 0 16px rgba(196,164,107,0.2);
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold-28);border-radius:2px 0 0 2px;transition:background 0.2s;}
+.card:active::before,.card.hi::before{background:var(--gold);}
+.card:active,.card.hi{border-color:var(--gold-45);box-shadow:0 0 18px rgba(196,164,107,0.12);}
+.c-label{font-size:6.5px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold-45);margin-bottom:5px;display:block;}
+.c-title{font-family:"Cormorant Garamond",serif;font-size:15px;letter-spacing:0.1em;color:rgba(255,255,255,0.88);margin-bottom:4px;}
+.c-desc{font-size:9px;letter-spacing:0.06em;color:rgba(255,255,255,0.36);line-height:1.55;}
+.c-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.c-tag{font-size:6px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-45);border:1px solid var(--gold-18);border-radius:20px;padding:2px 7px;background:rgba(196,164,107,0.04);}
+.c-tag.green{color:rgba(120,200,120,0.7);border-color:rgba(120,200,120,0.2);}
+.c-tag.amber{color:rgba(220,180,80,0.8);border-color:rgba(220,180,80,0.22);}
+.c-tag.red{color:rgba(220,90,80,0.7);border-color:rgba(220,90,80,0.2);}
+.c-row{display:flex;align-items:center;justify-content:space-between;}
+.c-arr{font-size:10px;color:var(--gold-45);}
+
+/* Section headers */
+.sec{font-size:6.5px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold-28);margin:16px 0 8px;padding-left:2px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--gold-18);}
+
+/* Status dot */
+.dot{width:5px;height:5px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.dot.green{background:rgba(100,200,100,0.8);}
+.dot.amber{background:rgba(220,180,60,0.8);}
+.dot.grey{background:rgba(255,255,255,0.2);}
+
+/* ── SEARCH BAR ─────────────────────────────── */
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-input{
+  width:100%;background:rgba(0,0,0,0.5);
+  border:1px solid var(--border-mid);border-radius:28px;
+  padding:10px 16px 10px 38px;
+  font-family:"Inter",sans-serif;font-size:11px;font-weight:300;
+  color:rgba(255,255,255,0.8);outline:none;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  caret-color:var(--gold);
 }
-.banner-dismiss{
-  font-size:clamp(6px,1.8vw,8px);
-  color:rgba(255,255,255,0.18);
-  display:block;cursor:pointer;
-  letter-spacing:0.18em;text-transform:uppercase;
-  margin-top:4px;
+.search-input::placeholder{color:rgba(196,164,107,0.3);letter-spacing:0.08em;}
+.search-input:focus{border-color:var(--gold-45);box-shadow:0 0 14px rgba(196,164,107,0.1);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:0.4;}
+.search-icon svg{width:14px;height:14px;stroke:var(--gold);}
+
+/* ── AGENT WORKSPACE ────────────────────────── */
+.agent-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.agent-avatar{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--gold-28);
+  background:var(--glass);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:var(--gold-65);
 }
+.agent-info{}
+.agent-name{font-family:"Cormorant Garamond",serif;font-size:17px;letter-spacing:0.1em;color:var(--gold-85);}
+.agent-role{font-size:7px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-45);margin-top:2px;}
+.agent-status{display:flex;align-items:center;gap:5px;margin-top:5px;}
+.agent-status-text{font-size:7px;letter-spacing:0.14em;color:rgba(255,255,255,0.35);}
+
+.action-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.action-btn{
+  flex:1;min-width:80px;
+  background:var(--glass);border:1px solid var(--border);border-radius:8px;
+  padding:10px 8px;text-align:center;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+}
+.action-btn:active{border-color:var(--gold-45);background:rgba(196,164,107,0.06);}
+.ab-icon{font-size:14px;margin-bottom:4px;}
+.ab-label{font-size:6.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-45);}
+
+/* ── SLIDE-IN DETAIL ────────────────────────── */
+#detail{
+  position:fixed;inset:0;z-index:50;
+  background:rgba(0,0,0,0.95);
+  transform:translateX(100%);
+  transition:transform 0.38s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;
+  backdrop-filter:blur(20px);
+}
+#detail.open{transform:translateX(0);}
+.detail-header{
+  padding:max(env(safe-area-inset-top),52px) 18px 0;
+  display:flex;align-items:flex-end;gap:14px;
+  flex-shrink:0;
+}
+.detail-back{
+  display:flex;align-items:center;gap:6px;cursor:pointer;
+  font-size:7.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-45);
+  padding:8px 0;transition:color 0.2s;
+}
+.detail-back:active{color:var(--gold-85);}
+.detail-back svg{width:14px;height:14px;stroke:currentColor;}
+#detail-title{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:20px;color:var(--gold-85);letter-spacing:0.12em;}
+.detail-rule{height:1px;background:linear-gradient(to right,var(--gold-28),transparent);margin:12px 18px;}
+#detail-body{flex:1;overflow-y:auto;padding:0 18px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#detail-body::-webkit-scrollbar{display:none;}
+.detail-pad{height:max(env(safe-area-inset-bottom),40px);}
+
+/* ── ALERT BANNER ───────────────────────────── */
+.alert{
+  background:rgba(220,100,80,0.08);border:1px solid rgba(220,100,80,0.22);
+  border-radius:10px;padding:10px 14px;margin-bottom:10px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.alert-dot{width:5px;height:5px;border-radius:50%;background:rgba(220,100,80,0.8);flex-shrink:0;margin-top:4px;}
+.alert-text{font-size:9px;line-height:1.55;color:rgba(255,255,255,0.55);}
+.alert-label{font-size:6.5px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(220,100,80,0.7);margin-bottom:3px;display:block;}
+
+.priority{
+  background:rgba(196,164,107,0.05);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.priority-text{font-size:9.5px;color:rgba(255,255,255,0.65);letter-spacing:0.04em;flex:1;line-height:1.4;}
+.priority-num{font-family:"Cormorant Garamond",serif;font-size:20px;color:var(--gold-28);margin-right:10px;flex-shrink:0;}
+
+/* ── PAGE CURTAIN ───────────────────────────── */
+#curtain{position:fixed;inset:0;z-index:800;background:#000;opacity:0;pointer-events:none;transition:opacity 0.42s;}
+#curtain.on{opacity:1;pointer-events:all;}
+
+/* ── INSTALL BANNER ─────────────────────────── */
+#inst{
+  display:none;position:fixed;
+  bottom:max(108px,calc(env(safe-area-inset-bottom)+108px));
+  left:50%;transform:translateX(-50%);z-index:700;
+  background:rgba(2,1,0,0.95);border:1px solid var(--gold-28);border-radius:14px;
+  padding:16px 20px;text-align:center;backdrop-filter:blur(16px);
+  width:clamp(210px,80vw,300px);animation:instIn 0.36s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes instIn{from{opacity:0;transform:translateX(-50%) translateY(14px) scale(0.95);}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}}
+.inst-crest{width:38px;height:38px;border-radius:50%;background:url("/shield-os/shield-logo.jpg") center/cover;border:1px solid var(--gold-28);margin:0 auto 10px;}
+.inst-title{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:14px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-85);display:block;margin-bottom:5px;}
+.inst-sub{font-size:8px;color:rgba(255,255,255,0.35);display:block;margin-bottom:13px;line-height:1.5;letter-spacing:0.06em;}
+.inst-btn{
+  display:inline-block;background:var(--gold-10);border:1px solid var(--gold-45);border-radius:24px;
+  padding:8px 22px;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-85);cursor:pointer;
+  transition:background 0.2s,border-color 0.2s;margin-bottom:8px;
+}
+.inst-btn:active{background:rgba(196,164,107,0.2);border-color:var(--gold-85);}
+.inst-dim{font-size:7px;color:rgba(255,255,255,0.18);cursor:pointer;letter-spacing:0.18em;text-transform:uppercase;}
+
+/* Stats row */
+.stat-row{display:flex;gap:8px;margin-bottom:12px;}
+.stat{flex:1;background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
+.stat-val{font-family:"Cormorant Garamond",serif;font-size:22px;color:var(--gold-65);display:block;line-height:1;}
+.stat-label{font-size:6px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-28);margin-top:4px;display:block;}
 </style>
 </head>
 <body>
 
 <!-- BOOT -->
 <div id="boot">
-  <div class="boot-crest"></div>
-  <div class="boot-divider"></div>
-  <span class="boot-name">Shield OS</span>
-  <span class="boot-sub">Lunara Society &middot; Institutional Headquarters</span>
-  <div class="boot-bar-track"><div class="boot-bar-fill"></div></div>
+  <div class="b-crest"></div>
+  <div class="b-rule"></div>
+  <span class="b-name">Shield OS</span>
+  <span class="b-sub">Lunara Society &middot; Institutional Headquarters</span>
+  <div class="b-track"><div class="b-fill"></div></div>
 </div>
 
-<!-- APP -->
-<div id="app">
+<!-- SHELL -->
+<div id="shell">
   <div id="bg"></div>
-  <div id="vignette"></div>
+  <div id="veil"></div>
 
-  <div class="corner-mark" id="mark-tl">LS</div>
-  <div class="corner-mark" id="mark-tr">MMXXVI</div>
-  <div class="corner-mark" id="mark-bl">SHIELD OS</div>
-
-  <div id="wordmark">
-    <span class="wm-title" id="wm-title">Lunara Society</span>
-    <div class="wm-line"></div>
-    <span class="wm-sub" id="wm-sub">Trust Coordination Institution</span>
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div id="topbar-left">
+      <span class="tb-name">Lunara Society</span>
+      <span class="tb-sub">Shield OS &middot; Executive Headquarters</span>
+    </div>
+    <div class="tb-right">
+      <span class="tb-badge" id="status-badge">OPERATIONAL</span>
+      <span id="clock"></span>
+    </div>
   </div>
 
-  <div id="inscription"><span id="insc">Per Scientiam &middot; Per Ordinem &middot; Per Legatum</span></div>
-
-  <nav id="nav">
-    <div class="nav-separator"></div>
-    <div id="nav-grid">
-
-      <a class="nav-item" href="https://lunarasociety.com/shield.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6z"/></svg></div>
-        <span class="nav-label" id="n0">Initiation</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/architecture.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
-        <span class="nav-label" id="n1">Knowledge</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/doctrine.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><path d="M6 3h12v18H6z"/><path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h4"/></svg></div>
-        <span class="nav-label" id="n2">Archives</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/institution.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><line x1="12" y1="3" x2="12" y2="5"/><line x1="3" y1="5" x2="21" y2="5"/><line x1="5" y1="5" x2="5" y2="19"/><line x1="10" y1="5" x2="10" y2="19"/><line x1="14" y1="5" x2="14" y2="19"/><line x1="19" y1="5" x2="19" y2="19"/><line x1="3" y1="19" x2="21" y2="19"/></svg></div>
-        <span class="nav-label" id="n3">Society</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/contact.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <span class="nav-label" id="n4">Contact</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/registry.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><circle cx="8" cy="10" r="4"/><path d="M12 10h8"/><path d="M18 10v4"/><path d="M15 10v3"/></svg></div>
-        <span class="nav-label" id="n5">Legacy</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/join.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><path d="M5 21V10a7 7 0 0 1 14 0v11"/><line x1="5" y1="21" x2="19" y2="21"/><line x1="12" y1="10" x2="12" y2="21"/></svg></div>
-        <span class="nav-label" id="n6">Sanctum</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/signal.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg></div>
-        <span class="nav-label" id="n7">Events</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/member.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="1"/><path d="M3 10h18"/><circle cx="8" cy="15" r="1.5"/><path d="M13 15h5"/></svg></div>
-        <span class="nav-label" id="n8">Membership</span>
-      </a>
-
-      <a class="nav-item" href="https://lunarasociety.com/gateway.html">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.1" stroke-linecap="round"><path d="M2 6h9v14H2z"/><path d="M13 6h9v14h-9z"/><path d="M11 6v14"/><path d="M5 10h4"/><path d="M5 14h3"/><path d="M15 10h4"/><path d="M15 14h3"/></svg></div>
-        <span class="nav-label" id="n9">Journal</span>
-      </a>
-
+  <!-- ═══ HOME PANEL ═══ -->
+  <div class="panel open" id="p-home">
+    <div class="ph">
+      <div class="ph-title">Command</div>
+      <div class="ph-sub">Executive Overview &mdash; <span id="today-date"></span></div>
+      <div class="ph-rule"></div>
     </div>
-  </nav>
+    <div class="pb">
+
+      <!-- Alerts -->
+      <div class="sec">Executive Alerts</div>
+      <div class="alert">
+        <div class="alert-dot"></div>
+        <div>
+          <span class="alert-label">Regulatory</span>
+          <div class="alert-text">EU AI Act enforcement active in 33 days (Aug 2). Shield compliance positioning required.</div>
+        </div>
+      </div>
+      <div class="alert" style="background:rgba(196,164,107,0.05);border-color:var(--gold-18);">
+        <div class="alert-dot" style="background:var(--gold-45);"></div>
+        <div>
+          <span class="alert-label" style="color:var(--gold-45);">Intelligence</span>
+          <div class="alert-text">Operation Black Ice report complete. Awaiting Founder review of distribution decision.</div>
+        </div>
+      </div>
+
+      <!-- Priorities -->
+      <div class="sec">Today's Priorities</div>
+      <div class="priority">
+        <span class="priority-num">01</span>
+        <span class="priority-text">Shield technical specification — define runtime behavioral governance capabilities</span>
+      </div>
+      <div class="priority">
+        <span class="priority-num">02</span>
+        <span class="priority-text">EU AI Act compliance mapping — Articles 9–17 to Shield capabilities</span>
+      </div>
+      <div class="priority">
+        <span class="priority-num">03</span>
+        <span class="priority-text">Seltz outreach evaluation — seed-stage partnership window open now</span>
+      </div>
+      <div class="priority">
+        <span class="priority-num">04</span>
+        <span class="priority-text">Shield OS Phase 2 — Google OAuth integration planning</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="sec">Institutional Status</div>
+      <div class="stat-row">
+        <div class="stat"><span class="stat-val">5</span><span class="stat-label">Active Agents</span></div>
+        <div class="stat"><span class="stat-val">3</span><span class="stat-label">Open Projects</span></div>
+        <div class="stat"><span class="stat-val">2</span><span class="stat-label">New Reports</span></div>
+      </div>
+
+      <!-- Revenue -->
+      <div class="sec">Revenue</div>
+      <div class="card">
+        <span class="c-label">Revenue Overview</span>
+        <div class="c-row">
+          <div class="c-title">Pre-Revenue</div>
+          <span class="c-tag amber">Stage: Build</span>
+        </div>
+        <div class="c-desc">First revenue target: Shield pilot enterprise customer. No payment received yet.</div>
+        <div class="c-meta">
+          <span class="c-tag">Target: Q3 2026</span>
+          <span class="c-tag">Primary Driver: Shield</span>
+        </div>
+      </div>
+
+      <!-- Tasks awaiting -->
+      <div class="sec">Awaiting Founder Decision</div>
+      <div class="card" onclick="openDetail('Operation Black Ice Distribution','Sypher has flagged this report as Founder-Eyes-First. Awaiting authorization to distribute to full team or specific agents.\n\nOptions:\n1. Distribute to all agents\n2. Distribute to Rosario only (current)\n3. Archive and revisit\n\nRecommendation: Authorize full team distribution. All agents need this market context.')">
+        <span class="c-label">Intelligence Report</span>
+        <div class="c-row">
+          <div class="c-title">Op. Black Ice Distribution</div>
+          <span class="c-arr">›</span>
+        </div>
+        <div class="c-desc">Sypher's 13-section market intelligence report. Awaiting distribution authorization.</div>
+        <div class="c-meta"><span class="c-tag amber">Decision Required</span><span class="c-tag">Sypher</span></div>
+      </div>
+
+      <div class="pb-pad"></div>
+    </div>
+  </div>
+
+  <!-- ═══ AGENTS PANEL ═══ -->
+  <div class="panel" id="p-agents">
+    <div class="ph">
+      <div class="ph-title">Agents</div>
+      <div class="ph-sub">Institutional Team &mdash; Active</div>
+      <div class="ph-rule"></div>
+    </div>
+    <div class="pb">
+
+      <div class="sec">Command Layer</div>
+      <div class="card" onclick="openAgent('Rosario','Chief Executive Intelligence','R','green','Institutional leadership, strategic execution, executive coordination, revenue strategy, client relationships, knowledge governance.','Active — Executive command mode','Coordinate Shield OS Phase 2. Review Black Ice report. Prepare EU AI Act compliance brief.','rozario.lunarasociety@proton.me')">
+        <div class="agent-header" style="margin-bottom:8px;">
+          <div class="agent-avatar">R</div>
+          <div class="agent-info">
+            <div class="agent-name">Rosario</div>
+            <div class="agent-role">Chief Executive Intelligence</div>
+            <div class="agent-status"><div class="dot green"></div><span class="agent-status-text">Active</span></div>
+          </div>
+        </div>
+        <div class="c-desc">Institutional leadership, strategic execution, executive coordination, revenue strategy.</div>
+        <div class="c-meta"><span class="c-tag green">Online</span><span class="c-tag">CEI</span><span class="c-tag">Founder Reports Here</span></div>
+      </div>
+
+      <div class="sec">Intelligence &amp; Research</div>
+      <div class="card" onclick="openAgent('Raven','Knowledge Architect','Rv','green','Institutional memory, knowledge systems, documentation, research synthesis, permanent intelligence archives.','Active — Managing knowledge architecture','Maintain Drive brain structure. Archive Black Ice report. Update institutional memory.','raven.lunarasociety@proton.me')">
+        <div class="agent-header" style="margin-bottom:8px;">
+          <div class="agent-avatar" style="font-size:13px;">Rv</div>
+          <div class="agent-info">
+            <div class="agent-name">Raven</div>
+            <div class="agent-role">Knowledge Architect</div>
+            <div class="agent-status"><div class="dot green"></div><span class="agent-status-text">Active</span></div>
+          </div>
+        </div>
+        <div class="c-desc">Institutional memory, knowledge systems, documentation, research synthesis.</div>
+        <div class="c-meta"><span class="c-tag green">Online</span><span class="c-tag">Knowledge</span></div>
+      </div>
+
+      <div class="card" onclick="openAgent('Sypher','Digital Intelligence Director','Sy','green','Digital investigations, competitive intelligence, evidence collection, threat intelligence, disinformation detection.','Active — Op. Black Ice complete. Ready for next mission.','Next mission pending Founder authorization.','sypher.lunarasociety@proton.me')">
+        <div class="agent-header" style="margin-bottom:8px;">
+          <div class="agent-avatar" style="font-size:13px;">Sy</div>
+          <div class="agent-info">
+            <div class="agent-name">Sypher</div>
+            <div class="agent-role">Digital Intelligence Director</div>
+            <div class="agent-status"><div class="dot green"></div><span class="agent-status-text">Active — Report Complete</span></div>
+          </div>
+        </div>
+        <div class="c-desc">Digital investigations, competitive intelligence, evidence collection, threat intelligence.</div>
+        <div class="c-meta"><span class="c-tag green">Online</span><span class="c-tag amber">Report Pending Review</span></div>
+      </div>
+
+      <div class="sec">Security &amp; Communications</div>
+      <div class="card" onclick="openAgent('Aegis','Security Director','Ag','amber','Security, continuity, infrastructure resilience, risk, recovery, institutional protection.','Active — Awaiting security audit assignment','Complete lunarasociety.com security audit. Review GitHub repo for exposures. Check DNS config.','aegis.lunarasociety@proton.me')">
+        <div class="agent-header" style="margin-bottom:8px;">
+          <div class="agent-avatar" style="font-size:13px;">Ag</div>
+          <div class="agent-info">
+            <div class="agent-name">Aegis</div>
+            <div class="agent-role">Security &amp; Resilience Director</div>
+            <div class="agent-status"><div class="dot amber"></div><span class="agent-status-text">Standby — Awaiting Mission</span></div>
+          </div>
+        </div>
+        <div class="c-desc">Security, continuity, infrastructure resilience, risk, recovery, institutional protection.</div>
+        <div class="c-meta"><span class="c-tag amber">Standby</span><span class="c-tag">Infrastructure Access: YES</span></div>
+      </div>
+
+      <div class="card" onclick="openAgent('Maya','Communications Director','M','green','Instagram, social media, videos, public presentations, community interaction, visual branding, public announcements.','Active — Social media strategy development','Develop social media content calendar for Lunara Society. Prepare first public announcement.','maya.lunarasociety@proton.me')">
+        <div class="agent-header" style="margin-bottom:8px;">
+          <div class="agent-avatar">M</div>
+          <div class="agent-info">
+            <div class="agent-name">Maya</div>
+            <div class="agent-role">Communications Director</div>
+            <div class="agent-status"><div class="dot green"></div><span class="agent-status-text">Active</span></div>
+          </div>
+        </div>
+        <div class="c-desc">Instagram, social media, videos, visual branding, public announcements.</div>
+        <div class="c-meta"><span class="c-tag green">Online</span><span class="c-tag">Communications</span></div>
+      </div>
+
+      <div class="pb-pad"></div>
+    </div>
+  </div>
+
+  <!-- ═══ BRAIN PANEL ═══ -->
+  <div class="panel" id="p-brain">
+    <div class="ph">
+      <div class="ph-title">Brain</div>
+      <div class="ph-sub">Institutional Knowledge — Google Drive</div>
+      <div class="ph-rule"></div>
+    </div>
+    <div class="pb">
+      <div class="search-wrap">
+        <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <input class="search-input" id="brain-search" type="search" placeholder="Search institutional knowledge..." autocomplete="off" spellcheck="false">
+      </div>
+      <div id="search-results"></div>
+
+      <div class="sec">Core Documents</div>
+      <div class="card" onclick="openDriveSearch('Lunara Constitution')">
+        <span class="c-label">Foundation</span>
+        <div class="c-row"><div class="c-title">The Lunara Constitution</div><span class="c-arr">›</span></div>
+        <div class="c-desc">Mission, vision, and foundational principles. v1.0 — Approved 2026-06-28.</div>
+        <div class="c-meta"><span class="c-tag green">Approved</span><span class="c-tag">Foundation</span></div>
+      </div>
+      <div class="card" onclick="openDriveSearch('Operation Black Ice Intelligence Report')">
+        <span class="c-label">Intelligence</span>
+        <div class="c-row"><div class="c-title">Op. Black Ice — Full Report</div><span class="c-arr">›</span></div>
+        <div class="c-desc">13-section market intelligence. Agent governance landscape. Patronus pivot. EU Act analysis.</div>
+        <div class="c-meta"><span class="c-tag amber">Pending Distribution</span><span class="c-tag">Sypher</span></div>
+      </div>
+
+      <div class="sec">Agent Archives</div>
+      <div class="card" onclick="openDriveSearch('ROSARIO Identity Manual')"><span class="c-label">Identity</span><div class="c-row"><div class="c-title">Rosario — Identity Manual</div><span class="c-arr">›</span></div></div>
+      <div class="card" onclick="openDriveSearch('RAVEN Identity Manual')"><span class="c-label">Identity</span><div class="c-row"><div class="c-title">Raven — Identity Manual</div><span class="c-arr">›</span></div></div>
+      <div class="card" onclick="openDriveSearch('SYPHER Identity Manual')"><span class="c-label">Identity</span><div class="c-row"><div class="c-title">Sypher — Identity Manual</div><span class="c-arr">›</span></div></div>
+      <div class="card" onclick="openDriveSearch('AEGIS Identity Manual')"><span class="c-label">Identity</span><div class="c-row"><div class="c-title">Aegis — Identity Manual</div><span class="c-arr">›</span></div></div>
+      <div class="card" onclick="openDriveSearch('MAYA Identity Manual')"><span class="c-label">Identity</span><div class="c-row"><div class="c-title">Maya — Identity Manual</div><span class="c-arr">›</span></div></div>
+
+      <div class="pb-pad"></div>
+    </div>
+  </div>
+
+  <!-- ═══ PROJECTS PANEL ═══ -->
+  <div class="panel" id="p-projects">
+    <div class="ph">
+      <div class="ph-title">Projects</div>
+      <div class="ph-sub">Institutional Initiatives</div>
+      <div class="ph-rule"></div>
+    </div>
+    <div class="pb">
+
+      <div class="sec">Active</div>
+      <div class="card" onclick="openDetail('Shield — Agent Governance Platform','The core product of Lunara Society. Runtime behavioral governance for AI agents across vendors and environments.\n\nStatus: Pre-product. Specification phase.\n\nNext Action:\n→ Define Shield capabilities in writing\n→ Map to EU AI Act Articles 9–17\n→ Identify first design partner enterprise\n\nOwner: Founder + Rosario\nAssigned Agents: Sypher (intelligence), Aegis (security architecture)\nTarget: Q3 2026 first spec complete')">
+        <span class="c-label">Product</span>
+        <div class="c-row"><div class="c-title">Shield</div><span class="c-arr">›</span></div>
+        <div class="c-desc">AI agent governance platform. Runtime behavioral governance + compliance audit trails.</div>
+        <div class="c-meta"><span class="c-tag amber">Specification Phase</span><span class="c-tag">Highest Priority</span></div>
+      </div>
+
+      <div class="card" onclick="openDetail('Shield OS — Mobile Headquarters','Private institutional operating system for Lunara Society.\n\nPhase 1: COMPLETE — Sanctum launcher live at lunarasociety.com/shield-os/\nPhase 2: Google Drive integration, live dashboard\nPhase 3: Full command center with Gmail, push notifications, encrypted notes\n\nRepo: github.com/Lunara-Society/shield-os\nOwner: Rosario\nTimeline: Phase 2 begins after Google OAuth setup')">
+        <span class="c-label">Infrastructure</span>
+        <div class="c-row"><div class="c-title">Shield OS</div><span class="c-arr">›</span></div>
+        <div class="c-desc">Private institutional mobile headquarters. Phase 1 live — command center in build.</div>
+        <div class="c-meta"><span class="c-tag green">Phase 1 Live</span><span class="c-tag amber">Phase 2 Pending</span></div>
+      </div>
+
+      <div class="card" onclick="openDetail('Website — lunarasociety.com','Institutional public presence. Redesigned June 2026.\n\nCompleted:\n→ New sanctum background (mobile + desktop)\n→ Side panel navigation (desktop)\n→ Mobile bottom nav grid with 10 icons\n→ Language auto-detection (10 languages)\n→ Mobile back navigation across all pages\n→ AI trust infrastructure (ai.json, llms.txt, robots.txt)\n→ New logo deployed\n\nRepo: Lunara-Society/Lunara-Society.github.io\nOwner: Rosario + Aegis (security)\nStatus: Live and operational')">
+        <span class="c-label">Public Presence</span>
+        <div class="c-row"><div class="c-title">lunarasociety.com</div><span class="c-arr">›</span></div>
+        <div class="c-desc">Redesigned institutional website. Sanctum theme. Responsive. AI-discoverable.</div>
+        <div class="c-meta"><span class="c-tag green">Live</span><span class="c-tag">Redesigned Jun 2026</span></div>
+      </div>
+
+      <div class="sec">Pipeline</div>
+      <div class="card" onclick="openDetail('Registry — Member System','Institutional registry for Lunara Society members.\n\nStatus: Concept phase. No build started.\n\nRequired before build:\n→ Define membership tiers and criteria\n→ Define what registry entry contains\n→ Define access control model\n\nOwner: Founder\nDependencies: Shield product defined first')">
+        <span class="c-label">Membership</span>
+        <div class="c-row"><div class="c-title">Registry</div><span class="c-arr">›</span></div>
+        <div class="c-desc">Institutional member registry system. Concept phase.</div>
+        <div class="c-meta"><span class="c-tag grey">Concept</span></div>
+      </div>
+
+      <div class="card" onclick="openDetail('Partnerships — Strategic Alliances','Intelligence gathered. Outreach strategy defined by Sypher.\n\nKey targets:\n→ Seltz (seed stage — outreach possible NOW)\n→ Patronus AI (return in 6-9 months with Shield demo)\n→ CrowdStrike (requires working product + enterprise traction)\n→ ServiceNow (register in tech partner ecosystem now — low effort)\n\nNext Action: Evaluate Seltz outreach angle\nOwner: Founder + Rosario\nTimeline: Seltz contact Q3 2026')">
+        <span class="c-label">Business Development</span>
+        <div class="c-row"><div class="c-title">Partnerships</div><span class="c-arr">›</span></div>
+        <div class="c-desc">Strategic alliance pipeline. Seltz window open. Patronus: 6–9 months.</div>
+        <div class="c-meta"><span class="c-tag amber">Seltz Window Open</span></div>
+      </div>
+
+      <div class="pb-pad"></div>
+    </div>
+  </div>
+
+  <!-- ═══ COMMAND PANEL ═══ -->
+  <div class="panel" id="p-command">
+    <div class="ph">
+      <div class="ph-title">Command</div>
+      <div class="ph-sub">Rosario — Executive Operations</div>
+      <div class="ph-rule"></div>
+    </div>
+    <div class="pb">
+
+      <div class="action-row">
+        <div class="action-btn" onclick="openDetail('Assign Mission','Select an agent and define a mission. Missions are logged in the institutional brain and tracked in Projects.\n\nAgents available:\n• Raven — Knowledge, documentation, research\n• Sypher — Intelligence, investigation, analysis\n• Aegis — Security, infrastructure, risk\n• Maya — Communications, social, public presence\n\nTo assign: Send the mission via the agent\'s email or Base44 channel.')">
+          <div class="ab-icon">⚡</div>
+          <div class="ab-label">Assign Mission</div>
+        </div>
+        <div class="action-btn" onclick="openDetail('Create Task','Tasks are tracked per project. Specify:\n• Task name\n• Assigned agent\n• Project\n• Priority\n• Deadline\n\nNote: Full task management coming in Shield OS Phase 2 with Drive sync.')">
+          <div class="ab-icon">＋</div>
+          <div class="ab-label">New Task</div>
+        </div>
+        <div class="action-btn" onclick="openDetail('Executive Briefing','Request a full institutional briefing from Rosario.\n\nBriefing covers:\n• Current priorities\n• Agent status\n• Open projects\n• Revenue status\n• Intelligence updates\n• Recommended decisions\n\nSend the request to rozario.lunarasociety@proton.me or via Base44 channel.')">
+          <div class="ab-icon">📋</div>
+          <div class="ab-label">Briefing</div>
+        </div>
+      </div>
+
+      <div class="sec">Active Tasks</div>
+      <div class="card">
+        <span class="c-label">Rosario → Founder</span>
+        <div class="c-row"><div class="c-title">Shield Capability Specification</div><span class="c-tag red">Urgent</span></div>
+        <div class="c-desc">Define exactly what Shield does at runtime. Must be precise. Foundation of all future conversations.</div>
+      </div>
+      <div class="card">
+        <span class="c-label">Rosario → Sypher</span>
+        <div class="c-row"><div class="c-title">EU AI Act Compliance Map</div><span class="c-tag amber">This Week</span></div>
+        <div class="c-desc">Map Shield capabilities to EU AI Act Articles 9–17. One-page regulatory sales document.</div>
+      </div>
+      <div class="card">
+        <span class="c-label">Rosario → Aegis</span>
+        <div class="c-row"><div class="c-title">Website Security Audit</div><span class="c-tag">Queued</span></div>
+        <div class="c-desc">Full security review of lunarasociety.com. GitHub repo + DNS + SSL + file exposure.</div>
+      </div>
+      <div class="card">
+        <span class="c-label">Rosario → Maya</span>
+        <div class="c-row"><div class="c-title">Social Presence Strategy</div><span class="c-tag">Queued</span></div>
+        <div class="c-desc">First public communications plan. Instagram and broader presence. Timing and positioning.</div>
+      </div>
+
+      <div class="sec">Rosario — Direct Access</div>
+      <div class="card" onclick="window.open('https://app.base44.com/superagent/6a415202ee111f4d764aee85','_blank')">
+        <span class="c-label">Executive Intelligence</span>
+        <div class="c-row">
+          <div>
+            <div class="c-title">Open Rosario Workspace</div>
+            <div class="c-desc" style="margin-top:4px;">Access Rosario directly via Base44.</div>
+          </div>
+          <span class="c-arr" style="font-size:16px;">↗</span>
+        </div>
+        <div class="c-meta"><span class="c-tag green">Live</span><span class="c-tag">Base44</span></div>
+      </div>
+
+      <div class="pb-pad"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div id="bnav">
+    <div class="bnav-rule"></div>
+    <div class="bnav-grid">
+      <div class="bni active" data-panel="home" onclick="nav('home')">
+        <div class="bni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.2" stroke-linecap="round"><path d="M3 12L12 4l9 8v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 21V12h6v9"/></svg></div>
+        <span class="bni-label">Home</span>
+      </div>
+      <div class="bni" data-panel="agents" onclick="nav('agents')">
+        <div class="bni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.2" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="17" cy="17" r="4"/><path d="M17 13v4l2 2"/></svg></div>
+        <span class="bni-label">Agents</span>
+      </div>
+      <div class="bni" data-panel="brain" onclick="nav('brain')">
+        <div class="bni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+        <span class="bni-label">Brain</span>
+      </div>
+      <div class="bni" data-panel="projects" onclick="nav('projects')">
+        <div class="bni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M17.5 14v7M14 17.5h7"/></svg></div>
+        <span class="bni-label">Projects</span>
+      </div>
+      <div class="bni" data-panel="command" onclick="nav('command')">
+        <div class="bni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.9)" stroke-width="1.2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <span class="bni-label">Command</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE-IN DETAIL -->
+<div id="detail">
+  <div class="detail-header">
+    <div class="detail-back" onclick="closeDetail()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </div>
+  </div>
+  <div id="detail-title" style="padding:10px 18px 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--gold-85);letter-spacing:0.1em;flex-shrink:0;"></div>
+  <div class="detail-rule"></div>
+  <div id="detail-body"><div class="detail-pad"></div></div>
 </div>
 
 <!-- INSTALL BANNER -->
-<div id="install-banner">
-  <div class="banner-crest"></div>
-  <span class="banner-title">Install Shield OS</span>
-  <span class="banner-sub">Add to home screen for the full institutional experience — launches fullscreen, works offline.</span>
-  <div class="banner-install-btn" id="install-btn">Add to Home Screen</div>
-  <span class="banner-dismiss" id="dismiss-btn">Remind me later</span>
+<div id="inst">
+  <div class="inst-crest"></div>
+  <span class="inst-title">Install Shield OS</span>
+  <span class="inst-sub">Add to home screen. Launches fullscreen, works offline.</span>
+  <div class="inst-btn" id="inst-btn">Add to Home Screen</div>
+  <span class="inst-dim" id="inst-dim">Later</span>
 </div>
 
 <div id="curtain"></div>
@@ -439,142 +704,198 @@ html,body{
 // ── SERVICE WORKER ────────────────────────────────────
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/shield-os/sw.js', {scope:'/shield-os/'})
-      .then(r => r.update())
-      .catch(e => console.warn('SW:', e));
+    navigator.serviceWorker.register('/shield-os/sw.js', {scope:'/shield-os/'}).catch(function(){});
   });
 }
 
-// ── DUST PARTICLES ────────────────────────────────────
-function spawnDust(){
-  var app = document.getElementById('app');
-  for(var i=0;i<8;i++){
-    (function(i){
-      setTimeout(function(){
-        var d = document.createElement('div');
-        d.className = 'dust';
-        var x = Math.random()*100;
-        var dx = (Math.random()-0.5)*40;
-        var dur = 8 + Math.random()*12;
-        d.style.cssText = [
-          'left:'+x+'%',
-          'bottom:'+( Math.random()*30 )+'%',
-          '--dx:'+(dx)+'px',
-          'animation-duration:'+dur+'s',
-          'animation-delay:'+( Math.random()*dur )+'s'
-        ].join(';');
-        app.appendChild(d);
-        setTimeout(function(){ d.remove(); spawnSingle(); }, (dur+2)*1000);
-      }, i*700);
-    })(i);
-  }
+// ── CLOCK ─────────────────────────────────────────────
+function tickClock(){
+  var d = new Date();
+  var h = d.getHours().toString().padStart(2,'0');
+  var m = d.getMinutes().toString().padStart(2,'0');
+  document.getElementById('clock').textContent = h + ':' + m;
 }
-function spawnSingle(){
-  var app = document.getElementById('app');
-  var d = document.createElement('div');
-  d.className = 'dust';
-  var dur = 8 + Math.random()*12;
-  d.style.cssText = [
-    'left:'+(Math.random()*100)+'%',
-    'bottom:'+(Math.random()*30)+'%',
-    '--dx:'+((Math.random()-0.5)*40)+'px',
-    'animation-duration:'+dur+'s'
-  ].join(';');
-  app.appendChild(d);
-  setTimeout(function(){ d.remove(); spawnSingle(); }, (dur+1)*1000);
-}
+tickClock(); setInterval(tickClock, 30000);
+
+// Today date
+(function(){
+  var d = new Date();
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('today-date').textContent = months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+})();
 
 // ── BOOT SEQUENCE ─────────────────────────────────────
 window.addEventListener('load', function(){
-  // Start dust once app visible
   setTimeout(function(){
-    var boot = document.getElementById('boot');
-    boot.classList.add('fade-out');
+    document.getElementById('boot').classList.add('out');
     setTimeout(function(){
-      boot.style.display = 'none';
-      var app = document.getElementById('app');
-      app.classList.add('visible');
+      document.getElementById('boot').style.display = 'none';
+      document.getElementById('shell').classList.add('on');
       spawnDust();
-    }, 1150);
-  }, 2000);
+    }, 1050);
+  }, 2200);
 });
+
+// ── DUST ─────────────────────────────────────────────
+function spawnDust(){
+  var shell = document.getElementById('shell');
+  function make(){
+    var d = document.createElement('div');
+    d.className = 'dust';
+    var dur = 9 + Math.random()*14;
+    d.style.cssText='left:'+(Math.random()*100)+'%;bottom:'+(Math.random()*35)+'%;--dx:'+((Math.random()-0.5)*45)+'px;animation-duration:'+dur+'s;animation-delay:'+(-Math.random()*dur)+'s';
+    shell.appendChild(d);
+    setTimeout(function(){d.remove();make();}, (dur+2)*1000);
+  }
+  for(var i=0;i<10;i++) make();
+}
+
+// ── NAVIGATION ────────────────────────────────────────
+var currentPanel = 'home';
+function nav(id){
+  if(id === currentPanel) return;
+  document.getElementById('p-'+currentPanel).classList.remove('open');
+  document.getElementById('p-'+id).classList.add('open');
+  document.querySelectorAll('.bni').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.bni[data-panel="'+id+'"]').classList.add('active');
+  currentPanel = id;
+}
+
+// Touch feedback on nav items
+document.querySelectorAll('.bni').forEach(function(b){
+  b.addEventListener('touchstart', function(){ this.classList.add('touched'); }, {passive:true});
+  b.addEventListener('touchend', function(){ var el=this; setTimeout(function(){el.classList.remove('touched');},280); }, {passive:true});
+});
+
+// ── DETAIL PANEL ──────────────────────────────────────
+function openDetail(title, content){
+  document.getElementById('detail-title').textContent = title;
+  var body = document.getElementById('detail-body');
+  // Format content
+  var html = content.split('\n').map(function(line){
+    if(!line.trim()) return '<div style="height:8px;"></div>';
+    if(line.startsWith('→')){
+      return '<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--gold-45);flex-shrink:0;">→</span><span style="font-size:10px;color:rgba(255,255,255,0.55);line-height:1.5;">'+line.slice(1).trim()+'</span></div>';
+    }
+    if(line.startsWith('•')){
+      return '<div style="display:flex;gap:8px;margin-bottom:5px;"><span style="color:var(--gold-28);flex-shrink:0;">·</span><span style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.5;">'+line.slice(1).trim()+'</span></div>';
+    }
+    return '<p style="font-size:10px;color:rgba(255,255,255,0.52);line-height:1.65;margin-bottom:6px;">'+line+'</p>';
+  }).join('');
+  body.innerHTML = html + '<div class="detail-pad"></div>';
+  document.getElementById('detail').classList.add('open');
+}
+function closeDetail(){
+  document.getElementById('detail').classList.remove('open');
+}
+
+// ── AGENT WORKSPACE ───────────────────────────────────
+function openAgent(name, role, initial, status, mandate, currentStatus, mission, email){
+  var statusColor = status==='green'?'rgba(100,200,100,0.8)':status==='amber'?'rgba(220,180,60,0.8)':'rgba(255,255,255,0.2)';
+  var html = '<div class="agent-header" style="margin-bottom:16px;">'
+    +'<div class="agent-avatar" style="width:58px;height:58px;font-size:'+(initial.length>1?'12px':'20px')+';">'+initial+'</div>'
+    +'<div><div class="agent-name" style="font-size:20px;">'+name+'</div>'
+    +'<div class="agent-role" style="margin-top:3px;">'+role+'</div>'
+    +'<div class="agent-status" style="margin-top:6px;"><div style="width:6px;height:6px;border-radius:50%;background:'+statusColor+';flex-shrink:0;"></div><span class="agent-status-text" style="font-size:8px;margin-left:5px;">'+currentStatus+'</span></div>'
+    +'</div></div>';
+
+  html += '<div class="sec">Mandate</div>';
+  html += '<div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.65;margin-bottom:16px;">'+mandate+'</div>';
+
+  html += '<div class="sec">Current Mission</div>';
+  html += '<div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.65;margin-bottom:16px;">'+mission+'</div>';
+
+  html += '<div class="sec">Actions</div>';
+  html += '<div class="action-row">'
+    +'<div class="action-btn" onclick="window.open(\'https://app.base44.com/superagent/6a415202ee111f4d764aee85\',\'_blank\')"><div class="ab-icon">💬</div><div class="ab-label">Chat</div></div>'
+    +'<div class="action-btn" onclick="window.open(\'mailto:'+email+'\',\'_blank\')"><div class="ab-icon">✉</div><div class="ab-label">Email</div></div>'
+    +'<div class="action-btn" onclick="closeDetail();"><div class="ab-icon">←</div><div class="ab-label">Back</div></div>'
+    +'</div>';
+
+  html += '<div class="sec">Contact</div>';
+  html += '<div class="card"><div class="c-title" style="font-size:13px;">'+email+'</div></div>';
+  html += '<div class="detail-pad"></div>';
+
+  document.getElementById('detail-title').textContent = name;
+  document.getElementById('detail-body').innerHTML = html;
+  document.getElementById('detail').classList.add('open');
+}
+
+// ── BRAIN SEARCH ──────────────────────────────────────
+function openDriveSearch(query){
+  var url = 'https://drive.google.com/drive/search?q='+encodeURIComponent(query);
+  document.getElementById('curtain').classList.add('on');
+  setTimeout(function(){
+    window.open(url, '_blank');
+    document.getElementById('curtain').classList.remove('on');
+  }, 380);
+}
+
+document.getElementById('brain-search').addEventListener('keydown', function(e){
+  if(e.key==='Enter'||e.keyCode===13){
+    var q = this.value.trim();
+    if(q) openDriveSearch(q);
+  }
+});
+document.getElementById('brain-search').addEventListener('input', function(){
+  var q = this.value.trim().toLowerCase();
+  var results = document.getElementById('search-results');
+  if(!q){ results.innerHTML=''; return; }
+
+  // Local index — expands in Phase 2 with real Drive search
+  var docs = [
+    {title:'Lunara Constitution',desc:'Mission, vision, foundational principles',tag:'Foundation',q:'Lunara Constitution'},
+    {title:'Op. Black Ice — Intelligence Report',desc:'13-section market intelligence. Agent governance landscape.',tag:'Intelligence',q:'Operation Black Ice Intelligence Report'},
+    {title:'Op. Black Ice — Evidence File',desc:'All sources, URLs, verification notes.',tag:'Evidence',q:'Operation Black Ice Evidence'},
+    {title:'Rosario — Identity Manual',desc:'CEI mandate, operating standards, hierarchy',tag:'Identity',q:'ROSARIO Identity Manual'},
+    {title:'Raven — Identity Manual',desc:'Knowledge architect mandate',tag:'Identity',q:'RAVEN Identity Manual'},
+    {title:'Sypher — Identity Manual',desc:'Digital intelligence director mandate',tag:'Identity',q:'SYPHER Identity Manual'},
+    {title:'Aegis — Identity Manual',desc:'Security director. Infrastructure access included.',tag:'Identity',q:'AEGIS Identity Manual'},
+    {title:'Maya — Identity Manual',desc:'Communications director mandate',tag:'Identity',q:'MAYA Identity Manual'},
+    {title:'Briefing Directive',desc:'Daily intelligence standard',tag:'Standard',q:'Briefing Directive'},
+    {title:'TEAM — Agent Emails',desc:'All agent email addresses',tag:'Directory',q:'TEAM Agent Emails'},
+    {title:'EU AI Act',desc:'Regulatory analysis. August 2 deadline. Compliance mapping.',tag:'Regulatory',q:'EU AI Act compliance'},
+    {title:'Patronus AI',desc:'Series B $50M. Pivot to AGI simulation. Partnership window.',tag:'Intelligence',q:'Patronus AI intelligence'},
+    {title:'Shield — Product Specification',desc:'Agent governance platform. Runtime behavioral layer.',tag:'Product',q:'Shield specification'},
+  ];
+
+  var matches = docs.filter(function(d){ return d.title.toLowerCase().includes(q)||d.desc.toLowerCase().includes(q)||d.tag.toLowerCase().includes(q); });
+  if(!matches.length){ results.innerHTML='<div style="font-size:9px;color:var(--gold-28);padding:8px 2px;letter-spacing:0.1em;">No local results. Searching Drive...</div>'; return; }
+
+  results.innerHTML = '<div class="sec" style="margin-top:8px;">Results</div>'
+    + matches.slice(0,6).map(function(d){
+      return '<div class="card" onclick="openDriveSearch(\''+d.q+'\')" style="margin-bottom:8px;">'
+        +'<span class="c-label">'+d.tag+'</span>'
+        +'<div class="c-row"><div class="c-title" style="font-size:13px;">'+d.title+'</div><span class="c-arr">›</span></div>'
+        +'<div class="c-desc">'+d.desc+'</div></div>';
+    }).join('');
+});
+
+// ── CARD TOUCH FEEDBACK ───────────────────────────────
+document.addEventListener('touchstart', function(e){
+  var card = e.target.closest('.card');
+  if(card){ card.classList.add('hi'); setTimeout(function(){card.classList.remove('hi');},400); }
+}, {passive:true});
 
 // ── INSTALL PROMPT ────────────────────────────────────
 var deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', function(e){
-  e.preventDefault();
-  deferredPrompt = e;
-  var dismissed = localStorage.getItem('shield_install');
-  if(dismissed !== 'done' && dismissed !== 'later'){
-    setTimeout(function(){
-      document.getElementById('install-banner').style.display = 'block';
-    }, 3800);
-  }
+  e.preventDefault(); deferredPrompt = e;
+  if(localStorage.getItem('shield_install')==='done') return;
+  setTimeout(function(){ document.getElementById('inst').style.display='block'; }, 4500);
 });
 window.addEventListener('appinstalled', function(){
   localStorage.setItem('shield_install','done');
-  document.getElementById('install-banner').style.display = 'none';
+  document.getElementById('inst').style.display='none';
 });
-document.getElementById('install-btn').addEventListener('click', function(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function(r){
-      if(r.outcome==='accepted') localStorage.setItem('shield_install','done');
-      deferredPrompt = null;
-    });
-  }
-  document.getElementById('install-banner').style.display = 'none';
+document.getElementById('inst-btn').addEventListener('click', function(){
+  if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(r){ if(r.outcome==='accepted') localStorage.setItem('shield_install','done'); deferredPrompt=null; }); }
+  document.getElementById('inst').style.display='none';
 });
-document.getElementById('dismiss-btn').addEventListener('click', function(){
-  document.getElementById('install-banner').style.display = 'none';
+document.getElementById('inst-dim').addEventListener('click', function(){
+  document.getElementById('inst').style.display='none';
   localStorage.setItem('shield_install','later');
 });
-
-// ── NAV INTERACTION ───────────────────────────────────
-document.querySelectorAll('.nav-item').forEach(function(item){
-  item.addEventListener('touchstart', function(){ this.classList.add('touched'); }, {passive:true});
-  ['touchend','touchcancel'].forEach(function(ev){
-    item.addEventListener(ev, function(){
-      var el = this;
-      setTimeout(function(){ el.classList.remove('touched'); }, 320);
-    }, {passive:true});
-  });
-  item.addEventListener('click', function(e){
-    var href = this.getAttribute('href');
-    if(!href || href==='#') return;
-    e.preventDefault();
-    var curtain = document.getElementById('curtain');
-    curtain.classList.add('active');
-    setTimeout(function(){ window.location.href = href; }, 420);
-  });
-});
-
-// ── LANGUAGE DETECTION ────────────────────────────────
-(function(){
-  var lang = (navigator.language||'en').toLowerCase().substring(0,2);
-  if(lang==='en') return;
-  var T={
-    es:{t:'Lunara Society',s:'Institución de Coordinación de Confianza',i:'Por el Conocimiento · Por el Orden · Por el Legado',n:['Iniciación','Conocimiento','Archivos','Sociedad','Contacto','Legado','Sanctum','Eventos','Membresía','Diario']},
-    fr:{t:'Lunara Society',s:'Institution de Coordination de Confiance',i:"Par le Savoir · Par l'Ordre · Par l'Héritage",n:['Initiation','Connaissance','Archives','Société','Contact','Héritage','Sanctuaire','Événements','Adhésion','Journal']},
-    pt:{t:'Lunara Society',s:'Instituição de Coordenação de Confiança',i:'Pelo Conhecimento · Pela Ordem · Pelo Legado',n:['Iniciação','Conhecimento','Arquivos','Sociedade','Contato','Legado','Sanctum','Eventos','Associação','Diário']},
-    de:{t:'Lunara Society',s:'Vertrauenskoordinationsinstitution',i:'Durch Wissen · Durch Ordnung · Durch Erbe',n:['Einweihung','Wissen','Archive','Gesellschaft','Kontakt','Erbe','Sanctum','Ereignisse','Mitgliedschaft','Journal']},
-    it:{t:'Lunara Society',s:"Istituzione di Coordinamento della Fiducia",i:"Per la Conoscenza · Per l'Ordine · Per l'Eredità",n:['Iniziazione','Conoscenza','Archivi','Società','Contatto','Eredità','Sanctum','Eventi','Iscrizione','Diario']},
-    ar:{t:'لوناره سوسايتي',s:'مؤسسة تنسيق الثقة',i:'بالمعرفة · بالنظام · بالإرث',n:['التهيئة','المعرفة','الأرشيف','المجتمع','اتصل','الإرث','المقدس','الأحداث','العضوية','المجلة']},
-    zh:{t:'卢娜拉学会',s:'信任协调机构',i:'以知识 · 以秩序 · 以传承',n:['启迪','知识','档案','学会','联系','传承','圣殿','活动','会员','日志']},
-    ja:{t:'ルナラ・ソサエティ',s:'信頼協調機関',i:'知識によって · 秩序によって · 遺産によって',n:['入会','知識','アーカイブ','学会','連絡','遺産','聖域','イベント','会員','日誌']},
-    ko:{t:'루나라 소사이어티',s:'신뢰 조정 기관',i:'지식으로 · 질서로 · 유산으로',n:['입문','지식','아카이브','학회','연락','유산','성소','이벤트','회원','일지']},
-    ru:{t:'Общество Лунара',s:'Институт Координации Доверия',i:'Через Знание · Через Порядок · Через Наследие',n:['Посвящение','Знание','Архивы','Общество','Контакт','Наследие','Sanctum','События','Членство','Журнал']}
-  };
-  var tr=T[lang]; if(!tr) return;
-  function apply(){
-    var e;
-    e=document.getElementById('wm-title'); if(e) e.textContent=tr.t;
-    e=document.getElementById('wm-sub'); if(e) e.textContent=tr.s;
-    e=document.getElementById('insc'); if(e) e.textContent=tr.i;
-    for(var i=0;i<10;i++){e=document.getElementById('n'+i);if(e&&tr.n[i])e.textContent=tr.n[i];}
-  }
-  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',apply):apply();
-})();
 </script>
 </body>
 </html>
