@@ -20,15 +20,15 @@
   --gold:#C4A46B;
   --gold-10:rgba(196,164,107,0.10);
   --gold-18:rgba(196,164,107,0.18);
-  --gold-28:rgba(196,164,107,0.28);
-  --gold-45:rgba(196,164,107,0.45);
-  --gold-65:rgba(196,164,107,0.65);
+  --gold-28:rgba(196,164,107,0.55);
+  --gold-45:rgba(196,164,107,0.75);
+  --gold-65:rgba(196,164,107,0.88);
   --gold-85:rgba(196,164,107,0.85);
   --black:#000;
-  --glass:rgba(4,3,2,0.86);
+  --glass:rgba(10,8,5,0.92);
   --glass-light:rgba(8,6,4,0.72);
-  --border:rgba(196,164,107,0.16);
-  --border-mid:rgba(196,164,107,0.28);
+  --border:rgba(196,164,107,0.35);
+  --border-mid:rgba(196,164,107,0.50);
   --red:rgba(220,80,70,0.85);
   --green:rgba(80,200,120,0.85);
   --amber:rgba(220,180,60,0.85);
@@ -161,8 +161,8 @@ html,body{
 .card:active::before,.card.hi::before{background:var(--gold);}
 .card:active,.card.hi{border-color:var(--gold-45);box-shadow:0 0 18px rgba(196,164,107,0.12);}
 .c-label{font-size:6.5px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold-45);margin-bottom:5px;display:block;}
-.c-title{font-family:"Cormorant Garamond",serif;font-size:15px;letter-spacing:0.1em;color:rgba(255,255,255,0.88);margin-bottom:4px;}
-.c-desc{font-size:9px;letter-spacing:0.06em;color:rgba(255,255,255,0.36);line-height:1.55;}
+.c-title{font-family:"Cormorant Garamond",serif;font-size:16px;letter-spacing:0.08em;color:rgba(255,255,255,0.98);margin-bottom:4px;}
+.c-desc{font-size:9px;letter-spacing:0.06em;color:rgba(255,255,255,0.75);line-height:1.55;}
 .c-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
 .c-tag{font-size:6px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-45);border:1px solid var(--gold-18);border-radius:20px;padding:2px 7px;background:rgba(196,164,107,0.04);}
 .c-tag.green{color:rgba(120,200,120,0.7);border-color:rgba(120,200,120,0.2);}
@@ -221,13 +221,13 @@ html,body{
 .alert-dot{width:6px;height:6px;border-radius:50%;background:rgba(220,80,70,0.8);margin-top:3px;flex-shrink:0;animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 .alert-label{font-size:6.5px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(220,100,90,0.7);display:block;margin-bottom:3px;}
-.alert-text{font-size:9px;color:rgba(255,255,255,0.5);line-height:1.55;}
+.alert-text{font-size:9px;color:rgba(255,255,255,0.82);line-height:1.55;}
 
 /* ── PRIORITY LIST ──────────────────────────── */
 .priority{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-bottom:1px solid var(--gold-10);cursor:pointer;}
 .priority:active{background:rgba(196,164,107,0.04);}
 .priority-num{font-family:"Cormorant Garamond",serif;font-size:13px;color:var(--gold-28);flex-shrink:0;margin-top:1px;width:18px;}
-.priority-text{font-size:10px;color:rgba(255,255,255,0.55);line-height:1.55;letter-spacing:0.04em;}
+.priority-text{font-size:10px;color:rgba(255,255,255,0.84);line-height:1.55;letter-spacing:0.04em;}
 
 /* ── INTELLIGENCE FEED ──────────────────────── */
 .feed-item{
@@ -245,7 +245,7 @@ html,body{
 }
 .feed-content{flex:1;}
 .feed-agent{font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-45);margin-bottom:3px;}
-.feed-text{font-size:10px;color:rgba(255,255,255,0.72);line-height:1.5;letter-spacing:0.03em;}
+.feed-text{font-size:10px;color:rgba(255,255,255,0.92);line-height:1.5;letter-spacing:0.03em;}
 .feed-time{font-size:7px;letter-spacing:0.1em;color:rgba(255,255,255,0.2);margin-top:4px;}
 .feed-type{
   font-size:6px;letter-spacing:0.14em;text-transform:uppercase;
@@ -272,7 +272,7 @@ html,body{
 .tl-content{flex:1;padding-top:4px;}
 .tl-date{font-size:6.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-28);margin-bottom:4px;}
 .tl-title{font-family:"Cormorant Garamond",serif;font-size:14px;color:rgba(255,255,255,0.85);letter-spacing:0.06em;margin-bottom:3px;}
-.tl-desc{font-size:9px;color:rgba(255,255,255,0.38);line-height:1.5;}
+.tl-desc{font-size:9px;color:rgba(255,255,255,0.75);line-height:1.5;}
 
 /* ── FOUNDER LOG ────────────────────────────── */
 .log-item{
@@ -282,7 +282,7 @@ html,body{
 .log-item:active{border-color:var(--gold-45);}
 .log-date{font-size:6.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-28);margin-bottom:6px;}
 .log-q{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:15px;color:var(--gold-65);line-height:1.4;margin-bottom:6px;}
-.log-a{font-size:9px;color:rgba(255,255,255,0.42);line-height:1.6;}
+.log-a{font-size:9px;color:rgba(255,255,255,0.78);line-height:1.6;}
 .log-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
 
 /* ── AGENT STYLES ───────────────────────────── */
@@ -296,10 +296,10 @@ html,body{
   flex-shrink:0;
 }
 .agent-info{display:flex;flex-direction:column;gap:3px;}
-.agent-name{font-family:"Cormorant Garamond",serif;font-size:17px;letter-spacing:0.1em;color:rgba(255,255,255,0.9);}
+.agent-name{font-family:"Cormorant Garamond",serif;font-size:17px;letter-spacing:0.08em;color:rgba(255,255,255,1);}
 .agent-role{font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-45);}
 .agent-status{display:flex;align-items:center;gap:5px;margin-top:2px;}
-.agent-status-text{font-size:8px;color:rgba(255,255,255,0.35);letter-spacing:0.08em;}
+.agent-status-text{font-size:8px;color:rgba(255,255,255,0.92);letter-spacing:0.08em;}
 
 /* ── ACTION BUTTONS ─────────────────────────── */
 .action-row{display:flex;gap:8px;margin-bottom:4px;}
@@ -317,7 +317,7 @@ html,body{
 #notif-panel{
   position:fixed;top:0;right:0;bottom:0;
   width:min(320px, 90vw);
-  background:rgba(4,3,2,0.97);
+  background:rgba(10,8,5,0.97);
   border-left:1px solid var(--gold-18);
   z-index:50;
   transform:translateX(100%);
@@ -344,7 +344,7 @@ html,body{
 .notif-item.unread{background:rgba(196,164,107,0.05);border-color:var(--gold-18);}
 .notif-item:active{border-color:var(--gold-45);}
 .ni-agent{font-size:6.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-45);margin-bottom:4px;}
-.ni-text{font-size:10px;color:rgba(255,255,255,0.72);line-height:1.5;}
+.ni-text{font-size:10px;color:rgba(255,255,255,0.92);line-height:1.5;}
 .ni-time{font-size:7px;color:rgba(255,255,255,0.2);margin-top:4px;letter-spacing:0.1em;}
 .ni-badge{
   display:inline-block;font-size:6px;letter-spacing:0.14em;text-transform:uppercase;
@@ -356,7 +356,7 @@ html,body{
 /* ── SLIDE DETAIL ───────────────────────────── */
 #detail{
   position:fixed;inset:0;z-index:40;
-  background:rgba(4,3,2,0.98);
+  background:rgba(10,8,5,0.98);
   transform:translateX(100%);
   transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);
   display:flex;flex-direction:column;overflow:hidden;
@@ -422,7 +422,7 @@ html,body{
 .so-result:active{border-color:var(--gold-45);}
 .so-r-scope{font-size:6.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-45);margin-bottom:4px;}
 .so-r-title{font-size:13px;color:rgba(255,255,255,0.85);font-family:"Cormorant Garamond",serif;letter-spacing:0.06em;margin-bottom:3px;}
-.so-r-desc{font-size:9px;color:rgba(255,255,255,0.35);line-height:1.45;}
+.so-r-desc{font-size:9px;color:rgba(255,255,255,0.92);line-height:1.45;}
 .so-empty{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.08em;padding:16px 2px;}
 
 /* ── VOICE BUTTON ───────────────────────────── */
@@ -450,7 +450,7 @@ html,body{
 }
 .inst-crest{width:36px;height:36px;border-radius:50%;border:1px solid var(--gold-28);background:url("/shield-os/shield-logo.jpg") center/cover;}
 .inst-title{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:15px;color:var(--gold-65);letter-spacing:0.15em;}
-.inst-sub{font-size:8px;color:rgba(255,255,255,0.35);text-align:center;letter-spacing:0.06em;line-height:1.5;}
+.inst-sub{font-size:8px;color:rgba(255,255,255,0.92);text-align:center;letter-spacing:0.06em;line-height:1.5;}
 .inst-btn{background:rgba(196,164,107,0.12);border:1px solid var(--gold-28);border-radius:28px;padding:9px 24px;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-65);cursor:pointer;width:100%;text-align:center;transition:background 0.2s;}
 .inst-btn:active{background:rgba(196,164,107,0.2);}
 .inst-dim{font-size:8px;color:rgba(255,255,255,0.2);cursor:pointer;letter-spacing:0.1em;}
@@ -499,15 +499,15 @@ html,body{
 .file-icon.pdf{background:rgba(220,80,70,0.1);}
 .file-icon.image{background:rgba(180,120,220,0.1);}
 .file-info{flex:1;min-width:0;}
-.file-name{font-size:11px;color:rgba(255,255,255,0.82);letter-spacing:0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.file-meta{font-size:7.5px;color:rgba(255,255,255,0.25);margin-top:3px;letter-spacing:0.06em;}
+.file-name{font-size:12px;color:rgba(255,255,255,0.96);letter-spacing:0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.file-meta{font-size:9px;color:rgba(255,255,255,0.58);margin-top:3px;letter-spacing:0.04em;}
 .drive-loading{text-align:center;padding:24px 0;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-28);}
 .drive-empty{font-size:9px;color:rgba(255,255,255,0.25);padding:16px 2px;letter-spacing:0.06em;}
 
 /* ── DOC VIEWER ─────────────────────────────── */
 #doc-viewer {
   position:fixed;inset:0;z-index:48;
-  background:rgba(4,3,2,0.99);
+  background:rgba(10,8,5,0.99);
   transform:translateX(100%);transition:transform 0.3s ease;
   display:flex;flex-direction:column;overflow:hidden;
 }
@@ -520,7 +520,7 @@ html,body{
 .dv-back{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-45);cursor:pointer;flex-shrink:0;}
 .dv-back svg{width:14px;height:14px;stroke:var(--gold-45);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
 .dv-title{font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.06em;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.dv-body{flex:1;overflow-y:auto;padding:18px;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:pre-wrap;font-size:11px;color:rgba(255,255,255,0.65);line-height:1.75;letter-spacing:0.03em;font-family:"Inter",sans-serif;font-weight:300;}
+.dv-body{flex:1;overflow-y:auto;padding:18px;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:pre-wrap;font-size:13px;color:rgba(255,255,255,0.92);line-height:1.8;letter-spacing:0.02em;font-family:"Inter",sans-serif;font-weight:300;}
 .dv-body::-webkit-scrollbar{display:none;}
 
 </style>
@@ -962,6 +962,9 @@ document.getElementById('drive-search-input').addEventListener('input', function
       <span class="tb-sub">Shield OS &middot; Institutional Command</span>
     </div>
     <div class="tb-right">
+      <div id="install-fab" onclick="" style="cursor:pointer;padding:3px 8px;border:1px solid rgba(196,164,107,0.45);border-radius:20px;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(196,164,107,0.85);background:rgba(196,164,107,0.08);">
+        ⬇ Install
+      </div>
       <div id="notif-bell" onclick="openNotifications()">
         <svg viewBox="0 0 24 24" fill="none" stroke="rgba(196,164,107,0.8)" stroke-width="1.3" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span id="notif-count">4</span>
@@ -1560,7 +1563,7 @@ document.getElementById('drive-search-input').addEventListener('input', function
     </div>
     <div class="pb">
       <div id="drive-auth-section">
-        <div style="font-size:9px;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:18px;letter-spacing:0.04em;">
+        <div style="font-size:9px;color:rgba(255,255,255,0.92);line-height:1.7;margin-bottom:18px;letter-spacing:0.04em;">
           Connect your Google account to browse and read the institutional brain directly inside Shield OS.
         </div>
         <div class="drive-auth-btn" id="drive-signin-btn" onclick="driveSignIn()">
@@ -1753,12 +1756,12 @@ function openDetail(title,content){
     if(!line.trim()) return '<div style="height:8px;"></div>';
     if(line.startsWith('→')||line.startsWith('✓')){
       var icon=line[0]==='✓'?'<span style="color:rgba(100,200,120,0.8);flex-shrink:0;">✓</span>':'<span style="color:var(--gold-45);flex-shrink:0;">→</span>';
-      return '<div style="display:flex;gap:8px;margin-bottom:6px;">'+icon+'<span style="font-size:10px;color:rgba(255,255,255,0.55);line-height:1.5;">'+line.slice(1).trim()+'</span></div>';
+      return '<div style="display:flex;gap:8px;margin-bottom:6px;">'+icon+'<span style="font-size:10px;color:rgba(255,255,255,0.84);line-height:1.5;">'+line.slice(1).trim()+'</span></div>';
     }
     if(line.match(/^\d+\./)){
-      return '<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--gold-28);flex-shrink:0;font-size:10px;">'+line.match(/^\d+/)[0]+'.</span><span style="font-size:10px;color:rgba(255,255,255,0.55);line-height:1.5;">'+line.replace(/^\d+\.\s*/,'')+'</span></div>';
+      return '<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--gold-28);flex-shrink:0;font-size:10px;">'+line.match(/^\d+/)[0]+'.</span><span style="font-size:10px;color:rgba(255,255,255,0.84);line-height:1.5;">'+line.replace(/^\d+\.\s*/,'')+'</span></div>';
     }
-    return '<p style="font-size:10px;color:rgba(255,255,255,0.52);line-height:1.65;margin-bottom:6px;">'+line+'</p>';
+    return '<p style="font-size:10px;color:rgba(255,255,255,0.80);line-height:1.65;margin-bottom:6px;">'+line+'</p>';
   }).join('');
   body.innerHTML=html+'<div class="detail-pad"></div>';
   document.getElementById('detail').classList.add('open');
@@ -1887,9 +1890,9 @@ function openAgent(name,role,initial,status,mandate,currentStatus,mission,email)
     +'<span class="agent-status-text" style="font-size:8px;margin-left:5px;">'+currentStatus+'</span></div>'
     +'</div></div>';
   html+='<div class="sec">Mandate</div>';
-  html+='<div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.65;margin-bottom:16px;">'+mandate+'</div>';
+  html+='<div style="font-size:10px;color:rgba(255,255,255,0.82);line-height:1.65;margin-bottom:16px;">'+mandate+'</div>';
   html+='<div class="sec">Current Mission</div>';
-  html+='<div style="font-size:10px;color:rgba(255,255,255,0.5);line-height:1.65;margin-bottom:16px;">'+mission+'</div>';
+  html+='<div style="font-size:10px;color:rgba(255,255,255,0.82);line-height:1.65;margin-bottom:16px;">'+mission+'</div>';
   html+='<div class="sec">Actions</div>';
   html+='<div class="action-row">'
     +'<div class="action-btn" onclick="window.open(\'https://app.base44.com/superagent/\',\'_blank\')"><div class="ab-icon">💬</div><div class="ab-label">Chat</div></div>'
@@ -1916,20 +1919,60 @@ var deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault(); deferredPrompt=e;
   if(localStorage.getItem('shield_install')==='done') return;
-  setTimeout(function(){document.getElementById('inst').style.display='flex';},4500);
+  // Show immediately — no delay
+  document.getElementById('inst').style.display='flex';
 });
 window.addEventListener('appinstalled',function(){
   localStorage.setItem('shield_install','done');
   document.getElementById('inst').style.display='none';
+  document.getElementById('install-fab').style.display='none';
 });
 document.getElementById('inst-btn').addEventListener('click',function(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(r){if(r.outcome==='accepted') localStorage.setItem('shield_install','done');deferredPrompt=null;});}
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(r){
+      if(r.outcome==='accepted') localStorage.setItem('shield_install','done');
+      deferredPrompt=null;
+    });
+  }
   document.getElementById('inst').style.display='none';
 });
 document.getElementById('inst-dim').addEventListener('click',function(){
   document.getElementById('inst').style.display='none';
   localStorage.setItem('shield_install','later');
 });
+// Install FAB click
+var installFab = document.getElementById('install-fab');
+if(installFab){
+  installFab.addEventListener('click', function(){
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r){
+        if(r.outcome==='accepted') localStorage.setItem('shield_install','done');
+        deferredPrompt=null;
+        installFab.style.display='none';
+      });
+    } else {
+      openDetail('Install Shield OS',
+        'To install Shield OS on your phone:
+
+' +
+        'On Android (Chrome):
+→ Tap the three-dot menu (⋮) at the top right
+→ Tap "Add to Home screen"
+→ Tap "Add"
+
+' +
+        'On iOS (Safari):
+→ Tap the Share button at the bottom
+→ Scroll down and tap "Add to Home Screen"
+→ Tap "Add"
+
+' +
+        'Once installed, Shield OS launches fullscreen like a native app.');
+    }
+  });
+}
 
 // ── GOOGLE DRIVE INTEGRATION ──────────────────────────
 var DRIVE_CLIENT_ID = '435149499989-ishtmvqj1g4ktcu405btu4brm0rd0r5o.apps.googleusercontent.com';
