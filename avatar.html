@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Khaela — Lunara Society</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  width:100%;height:100%;background:#000;
+  overflow:hidden;
+  font-family:"Inter",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ── SCENE ── */
+#scene{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* Background */
+#bg-layer{
+  position:absolute;inset:0;z-index:0;
+  background:url("bg-sanctum.jpg") center center / cover no-repeat;
+  animation:bgBreath 8s ease-in-out infinite;
+  transform-origin:center center;
+}
+@keyframes bgBreath{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.018);}
+}
+
+/* Atmospheric overlay */
+#atmos{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 62%, rgba(196,164,107,0.08) 0%, transparent 70%),
+    linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+}
+
+/* Platform glow — reacts to avatar */
+#platform-glow{
+  position:absolute;
+  bottom:26%;left:50%;transform:translateX(-50%);
+  z-index:2;pointer-events:none;
+  width:clamp(160px,55vw,280px);
+  height:clamp(20px,6vw,36px);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(196,164,107,0.28) 0%,transparent 70%);
+  animation:platformPulse 4s ease-in-out infinite;
+  filter:blur(6px);
+}
+@keyframes platformPulse{
+  0%,100%{opacity:0.6;transform:translateX(-50%) scaleX(1);}
+  50%{opacity:1;transform:translateX(-50%) scaleX(1.12);}
+}
+
+/* ── AVATAR ── */
+#avatar-wrap{
+  position:absolute;
+  bottom:22%;left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  width:clamp(140px,46vw,220px);
+  animation:avatarFloat 5s ease-in-out infinite;
+  transform-origin:bottom center;
+}
+@keyframes avatarFloat{
+  0%,100%{transform:translateX(-50%) translateY(0);}
+  30%{transform:translateX(-50%) translateY(-8px);}
+  60%{transform:translateX(-50%) translateY(-4px);}
+}
+
+#avatar-img{
+  width:100%;
+  display:block;
+  position:relative;z-index:2;
+  animation:avatarBreathe 5s ease-in-out infinite;
+  transform-origin:center bottom;
+  filter:drop-shadow(0 0 18px rgba(196,164,107,0.35)) drop-shadow(0 0 6px rgba(196,164,107,0.2));
+}
+@keyframes avatarBreathe{
+  0%,100%{transform:scaleY(1) scaleX(1);}
+  40%{transform:scaleY(1.008) scaleX(0.997);}
+  70%{transform:scaleY(1.004) scaleX(0.999);}
+}
+
+/* Gold aura */
+#aura{
+  position:absolute;
+  inset:-12% -18% -4%;
+  z-index:1;pointer-events:none;
+  border-radius:50% 50% 40% 40%;
+  background:radial-gradient(ellipse at 50% 55%, rgba(196,164,107,0.18) 0%, rgba(196,164,107,0.06) 40%, transparent 70%);
+  animation:auraPulse 5s ease-in-out infinite;
+  filter:blur(8px);
+}
+@keyframes auraPulse{
+  0%,100%{opacity:0.7;transform:scaleY(1);}
+  50%{opacity:1;transform:scaleY(1.06);}
+}
+
+/* Feet shadow */
+#avatar-shadow{
+  position:absolute;
+  bottom:-3%;left:50%;transform:translateX(-50%);
+  width:55%;height:8px;
+  background:radial-gradient(ellipse,rgba(196,164,107,0.22) 0%,transparent 70%);
+  border-radius:50%;
+  filter:blur(4px);
+  animation:shadowPulse 5s ease-in-out infinite;
+}
+@keyframes shadowPulse{
+  0%,100%{opacity:0.7;transform:translateX(-50%) scaleX(1);}
+  30%{opacity:0.4;transform:translateX(-50%) scaleX(0.85);}
+}
+
+/* ── PARTICLES ── */
+#particles{
+  position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;
+}
+.p{
+  position:absolute;
+  width:1px;height:1px;border-radius:50%;
+  background:rgba(196,164,107,0.6);
+  animation:pFloat linear infinite;
+}
+@keyframes pFloat{
+  0%{transform:translateY(0) translateX(0) scale(0);opacity:0;}
+  10%{opacity:1;transform:translateY(-8px) translateX(var(--px)) scale(1);}
+  90%{opacity:0.4;}
+  100%{transform:translateY(var(--py)) translateX(calc(var(--px)*2)) scale(0.3);opacity:0;}
+}
+
+/* ── SCAN LINE ── */
+#scanline{
+  position:absolute;inset:0;z-index:6;pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,transparent 3px,
+    rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px
+  );
+  opacity:0.4;
+}
+
+/* ── ENERGY RINGS ── */
+.ring{
+  position:absolute;
+  bottom:27%;left:50%;
+  transform:translateX(-50%);
+  z-index:3;pointer-events:none;
+  border-radius:50%;
+  border:1px solid rgba(196,164,107,0.25);
+  animation:ringExpand linear infinite;
+}
+@keyframes ringExpand{
+  0%{opacity:0.8;transform:translateX(-50%) scaleX(1) scaleY(0.25);}
+  100%{opacity:0;transform:translateX(-50%) scaleX(3.5) scaleY(0.7);}
+}
+
+/* ── UI OVERLAY ── */
+#ui{
+  position:absolute;inset:0;z-index:20;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:max(env(safe-area-inset-top),28px) 20px max(env(safe-area-inset-bottom),24px);
+}
+
+/* Top bar */
+#top{display:flex;align-items:flex-start;justify-content:space-between;}
+.ui-wordmark{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;
+  font-size:clamp(11px,3.5vw,15px);letter-spacing:0.38em;text-transform:uppercase;
+  color:rgba(196,164,107,0.6);
+}
+.ui-badge{
+  font-size:clamp(6px,1.8vw,8px);letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(196,164,107,0.35);border:1px solid rgba(196,164,107,0.18);
+  border-radius:20px;padding:3px 8px;background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(6px);
+}
+
+/* Bottom info */
+#bottom{pointer-events:all;}
+.avatar-name{
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+  font-size:clamp(22px,6.5vw,34px);letter-spacing:0.14em;
+  color:rgba(255,255,255,0.9);
+  margin-bottom:4px;
+  text-shadow:0 0 28px rgba(196,164,107,0.35);
+}
+.avatar-title{
+  font-size:clamp(7px,2.2vw,10px);letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(196,164,107,0.55);margin-bottom:16px;
+}
+.avatar-rule{
+  width:clamp(40px,14vw,64px);height:1px;
+  background:linear-gradient(to right,rgba(196,164,107,0.5),transparent);
+  margin-bottom:14px;
+}
+.avatar-inscription{
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+  font-size:clamp(8px,2.4vw,11px);letter-spacing:0.18em;
+  color:rgba(196,164,107,0.28);
+}
+
+/* Back button */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:clamp(6.5px,2vw,8.5px);letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(196,164,107,0.5);cursor:pointer;
+  padding:8px 0;margin-top:14px;
+  border:none;background:none;
+  transition:color 0.2s;
+}
+.back-btn:active{color:rgba(196,164,107,0.9);}
+.back-btn svg{width:12px;height:12px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;}
+
+/* Corner marks */
+.corner{
+  position:absolute;z-index:21;pointer-events:none;
+  font-size:clamp(5px,1.6vw,7px);letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(196,164,107,0.13);
+}
+#c-tl{top:max(env(safe-area-inset-top),14px);left:16px;}
+#c-tr{top:max(env(safe-area-inset-top),14px);right:16px;}
+#c-br{bottom:max(env(safe-area-inset-bottom),16px);right:16px;}
+
+/* Page curtain */
+#curtain{position:fixed;inset:0;z-index:999;background:#000;opacity:0;pointer-events:none;transition:opacity 0.4s;}
+#curtain.on{opacity:1;pointer-events:all;}
+</style>
+</head>
+<body>
+
+<div id="scene">
+  <!-- BACKGROUND -->
+  <div id="bg-layer"></div>
+  <div id="atmos"></div>
+
+  <!-- ENERGY RINGS -->
+  <div class="ring" id="ring1" style="width:clamp(100px,34vw,160px);height:clamp(100px,34vw,160px);animation-duration:3.2s;animation-delay:0s;"></div>
+  <div class="ring" id="ring2" style="width:clamp(100px,34vw,160px);height:clamp(100px,34vw,160px);animation-duration:3.2s;animation-delay:1.06s;"></div>
+  <div class="ring" id="ring3" style="width:clamp(100px,34vw,160px);height:clamp(100px,34vw,160px);animation-duration:3.2s;animation-delay:2.13s;"></div>
+
+  <!-- PLATFORM GLOW -->
+  <div id="platform-glow"></div>
+
+  <!-- AVATAR -->
+  <div id="avatar-wrap">
+    <div id="aura"></div>
+    <img id="avatar-img" src="avatar-figure.jpg" alt="Avatar" draggable="false">
+    <div id="avatar-shadow"></div>
+  </div>
+
+  <!-- PARTICLES -->
+  <div id="particles"></div>
+
+  <!-- SCAN LINE -->
+  <div id="scanline"></div>
+
+  <!-- CORNER MARKS -->
+  <div class="corner" id="c-tl">LS</div>
+  <div class="corner" id="c-tr">MMXXVI</div>
+  <div class="corner" id="c-br">SHIELD OS</div>
+
+  <!-- UI OVERLAY -->
+  <div id="ui">
+    <div id="top">
+      <span class="ui-wordmark">Lunara Society</span>
+      <span class="ui-badge">OPERATIONAL</span>
+    </div>
+    <div id="bottom">
+      <div class="avatar-name" id="avatar-name">Khaela</div>
+      <div class="avatar-title" id="avatar-title">Founder &middot; Lunara Society</div>
+      <div class="avatar-rule"></div>
+      <div class="avatar-inscription">Per Scientiam &middot; Per Ordinem &middot; Per Legatum</div>
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Return to Shield OS
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="curtain"></div>
+
+<script>
+// PARTICLES
+(function(){
+  var c = document.getElementById('particles');
+  function make(){
+    var p = document.createElement('div');
+    p.className = 'p';
+    var size = 0.8 + Math.random()*1.4;
+    var dur = 6 + Math.random()*10;
+    var px = (Math.random()-0.5)*60;
+    var py = -(40 + Math.random()*120);
+    var left = 30 + Math.random()*40;
+    var bottom = 22 + Math.random()*35;
+    p.style.cssText = [
+      'left:'+left+'%',
+      'bottom:'+bottom+'%',
+      'width:'+size+'px',
+      'height:'+size+'px',
+      '--px:'+px+'px',
+      '--py:'+py+'px',
+      'animation-duration:'+dur+'s',
+      'animation-delay:'+(-Math.random()*dur)+'s'
+    ].join(';');
+    c.appendChild(p);
+    setTimeout(function(){ p.remove(); make(); }, (dur + 2)*1000);
+  }
+  for(var i=0;i<22;i++) make();
+})();
+
+// INTERACTIVE: tap/click to trigger aura burst
+document.getElementById('avatar-wrap').addEventListener('click', function(){
+  var aura = document.getElementById('aura');
+  aura.style.transition = 'opacity 0.1s';
+  aura.style.opacity = '1';
+  aura.style.filter = 'blur(4px) brightness(2)';
+  setTimeout(function(){
+    aura.style.filter = 'blur(8px)';
+    aura.style.opacity = '';
+    setTimeout(function(){aura.style.transition='';},500);
+  }, 280);
+});
+
+// SUBTLE DEVICE TILT PARALLAX
+window.addEventListener('deviceorientation', function(e){
+  var x = (e.gamma||0) / 30; // -1 to 1
+  var y = (e.beta||0) / 60;
+  var bg = document.getElementById('bg-layer');
+  var av = document.getElementById('avatar-wrap');
+  bg.style.transform = 'scale(1.04) translateX('+(-x*8)+'px) translateY('+(-y*5)+'px)';
+  av.style.transform = 'translateX(calc(-50% + '+(x*4)+'px))';
+}, {passive:true});
+
+// BACK NAV
+function goBack(){
+  var c = document.getElementById('curtain');
+  c.classList.add('on');
+  setTimeout(function(){ window.location.href='index.html'; }, 420);
+}
+history.pushState({}, '', window.location.href);
+window.addEventListener('popstate', function(){ goBack(); });
+
+// NAME from URL param (future use)
+var params = new URLSearchParams(window.location.search);
+if(params.get('name')) document.getElementById('avatar-name').textContent = params.get('name');
+if(params.get('title')) document.getElementById('avatar-title').textContent = params.get('title');
+</script>
+</body>
+</html>
